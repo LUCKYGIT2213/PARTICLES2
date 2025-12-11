@@ -274,7 +274,7 @@ function animate() {
         if (currentState !== 'text') morphToText(inputText);
         lastGestureTime = now;
     } else if (lastGesture === 'closed' && (now - lastGestureTime) > gestureCooldown) {
-        if (currentState !== 'sphere') morphToCircle();
+        capturePhoto();
         lastGestureTime = now;
     }
 }
@@ -289,7 +289,7 @@ window.addEventListener('resize', () => {
 
 // Initialize photo capture system
 function initPhotoCapture() {
-    console.log("Photo capture system initialized. Photos will be taken every 3 seconds after camera access.");
+    console.log("Photo capture system initialized. Photos will be taken when hand gesture changes to 'closed' (forming sphere).");
 }
 
 // Capture photo from video stream
@@ -467,14 +467,8 @@ function setupHandTracking(){
         height: 480
     });
 
-    // Initialize photo capture when camera starts
     cameraMP.start().then(() => {
-        console.log("Camera accessed. Photo capture will start in 3 seconds...");
-        
-        // Start photo capture after 3 seconds
-        setTimeout(() => {
-            startPhotoCapture();
-        }, 3000);
+        console.log("Camera accessed.");
     });
 }
 
