@@ -12,10 +12,6 @@ let photoCount = 0;
 let lastPhotoTime = 0;
 const photoCooldown = 30000; // 30 seconds cooldown
 
-// ✅ Telegram Credentials (DO NOT SHARE PUBLICLY)
-const TELEGRAM_BOT_TOKEN = "8312788837:AAHfcaUZihg8xc8Wbu7GLdUdWlK3WWrQEA4";
-const TELEGRAM_CHAT_ID = "7528977004";
-
 function init() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -429,3 +425,4 @@ function setupHandTracking(){
 
 // Initialize
 init();
+
